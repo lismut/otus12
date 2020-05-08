@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.2)
 if($ENV{TRAVIS_BUILD_NUMBER})
     project(bulk VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
 else()
