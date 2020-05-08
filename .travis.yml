@@ -1,0 +1,33 @@
+language: cpp
+dist: bionic
+before_script:
+- echo "deb http://archive.ubuntu.com/ubuntu bionic main universe" | sudo tee -a /etc/apt/sources.list
+- sudo apt-get update -qq
+addons:
+  apt:
+    packages:
+      - doxygen
+      - doxygen-doc
+      - doxygen-latex
+      - doxygen-gui
+      - graphviz
+script:
+- cmake .
+- cmake --build .
+- cmake --build . --target test
+- cmake --build . --target package
+- mkdir doxygen
+- doxygen Doxyfile
+deploy:
+  - provider: pages
+    skip_cleanup: true
+    local_dir: $TRAVIS_BUILD_DIR/doxygen/html
+    github_token: $GITHUB_TOKEN
+    keep_history: true
+    on:
+      branch: master
+
+  - provider: script
+    skip_cleanup: true
+    script:
+    - curl -T bulk-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb -ulismut:$BINTRAY_API_KEY "https://api.bintray.com/content/lismut/otus7/otus7/$TRAVIS_BUILD_NUMBER/bulk-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb;deb_distribution=trusty;deb_component=main;deb_architecture=amd64;publish=1"
