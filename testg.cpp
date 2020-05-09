@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <string>
 #include "bulkmanager.h"
+std::mutex globalCoutMutex;
 
 TEST(GOOGLE_TEST1, test1)
 {
