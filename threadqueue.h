@@ -25,7 +25,7 @@ public:
     bool empty() { return head == tail; }
     void enqueue(std::unique_ptr<bulk> value)
     {
-        std::lock_guard guard(mtx);
+        std::lock_guard<std::mutex> guard(mtx);
         auto item = std::make_shared<QueueItem>(std::move(value));
         if(empty()) {
             head = std::make_shared<QueueItem>(nullptr);
@@ -38,7 +38,7 @@ public:
     }
     std::unique_ptr<bulk> dequeue()
     {
-        std::lock_guard guard(mtx);
+        std::lock_guard<std::mutex> guard(mtx);
         if (empty())
             return nullptr; // queue is empty
         head = head->next;

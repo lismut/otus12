@@ -23,7 +23,7 @@ struct bulkManager {
     const bulk& getBulk() const {return currentBulk; }
     const size_t& getNesting() const {return nestingCounter; }
     ~bulkManager() {
-        std::lock_guard grd(globalCoutMutex);
+        std::lock_guard<std::mutex> grd(globalCoutMutex);
         std::cout << "main поток - строки=" << strCounter << ", блоки=" << bulkCounter << ", команды=" << comCounter << std::endl;
     }
 private:

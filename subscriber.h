@@ -23,7 +23,7 @@ public:
     ~isubscriber() {
         isFinish = true;
         my->join();
-        std::lock_guard grd(globalCoutMutex);
+        std::lock_guard<std::mutex> grd(globalCoutMutex);
         std::cout << name << " поток - блоки=" << blocksCount << ", команды=" << comCount << std::endl;
     }
 protected:
@@ -32,7 +32,7 @@ protected:
     size_t comCount = 0;
     std::string name;
     std::unique_ptr<std::thread> my;
-    std::atomic<bool> isFinish = ATOMIC_VAR_INIT(false);
+    std::atomic<bool> isFinish{false};
 };
 
 ///  @brief Класс-подписчик для вывода на экран
@@ -49,7 +49,7 @@ public:
     }
 private:
     void proc(std::unique_ptr<bulk> b) {
-        std::lock_guard grd(globalCoutMutex);
+        std::lock_guard<std::mutex> grd(globalCoutMutex);
         std::cout << "bulk: " << b->output() << std::endl;
     }
 };
