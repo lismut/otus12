@@ -32,7 +32,7 @@ protected:
     size_t comCount = 0;
     std::string name;
     std::unique_ptr<std::thread> my;
-    std::atomic<bool> isFinish = false;
+    std::atomic<bool> isFinish = ATOMIC_VAR_INIT(false);
 };
 
 ///  @brief Класс-подписчик для вывода на экран
