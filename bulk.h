@@ -12,7 +12,9 @@
 /// @brief Класс предназначенный для хранения блоков команд
 struct bulk {
 public:
-    bulk(size_t sz) { commands.reserve(sz); }
+    explicit bulk(size_t sz) { commands.reserve(sz); }
+    bulk(bulk&& src) noexcept : name_time(std::move(src.name_time)), commands(std::move(src.commands)) {}
+    bulk(const bulk& src) = default;
     void push(const std::string& cmd);
     std::string output() const;
     std::string name() const { return name_time;  };

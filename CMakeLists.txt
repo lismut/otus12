@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.2)
 if($ENV{TRAVIS_BUILD_NUMBER})
-    project(bulk VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
+    project(bulkmt VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
 else()
-    project(bulk VERSION 0.0.3)
+    project(bulkmt VERSION 0.0.3)
 endif()
 
 find_package (Threads REQUIRED)
@@ -13,20 +13,20 @@ add_subdirectory(
         gtest
 )
 
-add_executable(bulk main.cpp subscriber.h bulk.h bulkmanager.h)
+add_executable(bulkmt main.cpp subscriber.h bulk.h bulkmanager.h threadqueue.h)
 add_executable(test_google testg.cpp)
 
-set_target_properties(bulk PROPERTIES
+set_target_properties(bulkmt PROPERTIES
         CXX_STANDARD 17
         CXX_STANDARD_REQUIRED ON
         )
-
+target_link_libraries (bulkmt ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries(test_google
         gtest
         ${CMAKE_THREAD_LIBS_INIT}
         )
 
-install(TARGETS bulk RUNTIME DESTINATION bin)
+install(TARGETS bulkmt RUNTIME DESTINATION bin)
 
 set(CPACK_GENERATOR DEB)
 
@@ -40,9 +40,9 @@ include(CPack)
 enable_testing()
 
 #add_test(test_valid_version print_ip)
-add_test(GOOGLE_TEST1 bulk)
-add_test(GOOGLE_TEST2 bulk)
-add_test(GOOGLE_TEST3 bulk)
-add_test(GOOGLE_TEST4 bulk)
-add_test(GOOGLE_TEST5 bulk)
-add_test(GOOGLE_TEST6 bulk)
+add_test(GOOGLE_TEST1 bulkmt)
+add_test(GOOGLE_TEST2 bulkmt)
+add_test(GOOGLE_TEST3 bulkmt)
+add_test(GOOGLE_TEST4 bulkmt)
+add_test(GOOGLE_TEST5 bulkmt)
+add_test(GOOGLE_TEST6 bulkmt)
