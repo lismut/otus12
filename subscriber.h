@@ -6,6 +6,7 @@
 
 #include "bulk.h"
 #include <fstream>
+#include <iostream>
 #include <thread>
 #include "threadqueue.h"
 

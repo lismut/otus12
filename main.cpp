@@ -1,21 +1,18 @@
 #include <iostream>
-#include "bulkmanager.h"
 #include <mutex>
-
-std::mutex globalCoutMutex;
+#include "async.h"
 
 int main(int argc, char* argv[]) {
-    if (argc != 2) {
-        std::cout << "Usage:" << std::endl;
-        std::cout << "   bulk [number of commands]" << std::endl;
-        return 0;
-    }
-    std::string one;
-    bulkManager manager(atoi(argv[1]));
-    while (std::cin >> one) {
-        if(std::cin.eof() || one =="quit") break;
-        manager.newString(one);
-    }
-    manager.finish();
+    std::size_t bulk = 5;
+    auto h = async::connect(bulk);
+    auto h2 = async::connect(bulk);
+    async::receive(h, "1", 1);
+    async::receive(h2, "1\n", 2);
+    async::receive(h, "\n2\n3\n4\n5\n6\n{\na\n", 15);
+    async::receive(h, "b\nc\nd\n}\n89\n", 11);
+    async::disconnect(h);
+    async::disconnect(h2);
+
     return 0;
+
 }

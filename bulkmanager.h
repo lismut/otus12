@@ -8,7 +8,7 @@
 #include "bulk.h"
 #include "subscriber.h"
 
-extern std::mutex globalCoutMutex;
+std::mutex globalCoutMutex;
 
 /// @brief Класс-обработчик поступающих входных строк
 struct bulkManager {
@@ -23,6 +23,7 @@ struct bulkManager {
     const bulk& getBulk() const {return currentBulk; }
     const size_t& getNesting() const {return nestingCounter; }
     ~bulkManager() {
+        if (currentBulk.size() != 0) flush();
         std::lock_guard<std::mutex> grd(globalCoutMutex);
         std::cout << "main поток - строки=" << strCounter << ", блоки=" << bulkCounter << ", команды=" << comCounter << std::endl;
     }
