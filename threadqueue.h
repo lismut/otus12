@@ -9,26 +9,27 @@
 #include <mutex>
 #include "bulk.h"
 
+template<typename T>
 class QueueItem
 {
 public:
-    std::unique_ptr<bulk> data;
-    std::shared_ptr<QueueItem> next;
+    std::unique_ptr<T> data;
+    std::shared_ptr<QueueItem<T>> next;
 
-    explicit QueueItem(std::unique_ptr<bulk> _data) noexcept : data(std::move(_data)), next(nullptr) {}
+    explicit QueueItem(std::unique_ptr<T> _data) noexcept : data(std::move(_data)), next(nullptr) {}
 };
 
-
-class Queue {
+template<typename T>
+class QueueTemplate {
 public:
-    Queue() : head(nullptr), tail(nullptr) {}
+    QueueTemplate() : head(nullptr), tail(nullptr) {}
     bool empty() { return head == tail; }
-    void enqueue(std::unique_ptr<bulk> value)
+    void enqueue(std::unique_ptr<T> value)
     {
         std::lock_guard<std::mutex> guard(mtx);
-        auto item = std::make_shared<QueueItem>(std::move(value));
+        auto item = std::make_shared<QueueItem<T>>(std::move(value));
         if(empty()) {
-            head = std::make_shared<QueueItem>(nullptr);
+            head = std::make_shared<QueueItem<T>>(nullptr);
             tail = item;
             head->next = tail;
         } else {
@@ -36,7 +37,7 @@ public:
             tail = item;
         }
     }
-    std::unique_ptr<bulk> dequeue()
+    std::unique_ptr<T> dequeue()
     {
         std::lock_guard<std::mutex> guard(mtx);
         if (empty())
@@ -46,7 +47,10 @@ public:
         return std::move(head->data);
     }
 private:
-    std::shared_ptr<QueueItem> head;
-    std::shared_ptr<QueueItem> tail;
+    std::shared_ptr<QueueItem<T>> head;
+    std::shared_ptr<QueueItem<T>> tail;
     std::mutex mtx;
 };
+
+typedef QueueTemplate<bulk> Queue;
+typedef QueueTemplate<std::string> QueueString;

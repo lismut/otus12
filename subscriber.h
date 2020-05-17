@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "bulk.h"
 #include <fstream>
 #include <iostream>
 #include <thread>
@@ -16,7 +15,8 @@ extern std::mutex globalCoutMutex;
 class isubscriber {
 public:
     explicit isubscriber(std::string&& _name) : name(_name) {}
-    void update(const bulk& b) {
+    void update(const bulk& b, std::shared_ptr<QueueString> qq) {
+        if (qstring != qq) qstring = qq;
         comCount += b.size();
         blocksCount++;
         tasks.enqueue(std::make_unique<bulk>(b));
@@ -24,11 +24,10 @@ public:
     ~isubscriber() {
         isFinish = true;
         my->join();
-        std::lock_guard<std::mutex> grd(globalCoutMutex);
-        std::cout << name << " поток - блоки=" << blocksCount << ", команды=" << comCount << std::endl;
     }
 protected:
     Queue tasks;
+    std::shared_ptr<QueueString> qstring;
     size_t blocksCount = 0;
     size_t comCount = 0;
     std::string name;
@@ -46,12 +45,16 @@ public:
                     proc(tasks.dequeue());
                 }
             }
+            std::lock_guard<std::mutex> grd(globalCoutMutex);
+            std::string out = name + " поток - блоки=" + std::to_string(blocksCount) + ", команды=" + std::to_string(comCount) + "\n";
+            qstring->enqueue(std::make_unique<std::string>(out));
         });
     }
 private:
     void proc(std::unique_ptr<bulk> b) {
         std::lock_guard<std::mutex> grd(globalCoutMutex);
-        std::cout << "bulk: " << b->output() << std::endl;
+        std::string out = "bulk: " + b->output() + "\n";
+        qstring->enqueue(std::make_unique<std::string>(out));
     }
 };
 

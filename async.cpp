@@ -11,7 +11,7 @@ handle_t connect(std::size_t bulk) {
     return idx;
 }
 
-void receive(handle_t handle, const char *data, std::size_t size) {
+void receive(handle_t handle, const char *data, std::size_t size, std::shared_ptr<QueueString> qq) {
     auto it = workers.find(handle);
     if (it != workers.end()) {
         std::stringstream ss(data);
@@ -19,11 +19,9 @@ void receive(handle_t handle, const char *data, std::size_t size) {
         while (!ss.eof()) {
             std::string a;
             ss >> a;
-            it->second->newString(a);
+            it->second->newString(a, qq);
         }
     }
-
-
 }
 
 void disconnect(handle_t handle) {

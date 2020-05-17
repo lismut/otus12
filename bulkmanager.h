@@ -5,7 +5,6 @@
 #pragma once
 
 #include <memory>
-#include "bulk.h"
 #include "subscriber.h"
 
 std::mutex globalCoutMutex;
@@ -17,19 +16,20 @@ struct bulkManager {
         filers.push_back(std::make_unique<filer>(1));
         filers.push_back(std::make_unique<filer>(2));
     }
-    void newString(const std::string& input);
-    void finish();
+    void newString(const std::string& input, std::shared_ptr<QueueString> qq);
     // For testing
     const bulk& getBulk() const {return currentBulk; }
     const size_t& getNesting() const {return nestingCounter; }
     ~bulkManager() {
         if (currentBulk.size() != 0) flush();
         std::lock_guard<std::mutex> grd(globalCoutMutex);
-        std::cout << "main поток - строки=" << strCounter << ", блоки=" << bulkCounter << ", команды=" << comCounter << std::endl;
+        std::string out = "main поток - строки=" + std::to_string(strCounter) + ", блоки=" + std::to_string(bulkCounter) + ", команды=" +
+                std::to_string(comCounter) + "\n";
+        qstring->enqueue(std::make_unique<std::string>(out));
     }
 private:
     void flush();
-
+    std::shared_ptr<QueueString> qstring;
     size_t nestingCounter = 0; //< Текущий уровень вложенности {
     size_t bulkLimit; //< Размер блока команд
     bulk currentBulk; //< Текущий блок команд
@@ -40,10 +40,11 @@ private:
     size_t bulkCounter = 0;
 };
 
-void bulkManager::newString(const std::string& input) {
+void bulkManager::newString(const std::string& input, std::shared_ptr<QueueString> qq) {
     static const std::string open = "{";
     static const std::string close = "}";
     strCounter++;
+    if (qq != qstring) qstring = qq;
     if (input != open && input != close) {
         currentBulk.push(input);
         comCounter++;
@@ -64,16 +65,12 @@ void bulkManager::newString(const std::string& input) {
     }
 }
 
-void bulkManager::finish() {
-    flush();
-}
-
 /// @brief Обработка конца блока команд
 void bulkManager::flush() {
     std::for_each(printers.begin(), printers.end(), [&](const auto& a){
-        a->update(currentBulk);
+        a->update(currentBulk, qstring);
     });
-    filers[bulkCounter%filers.size()]->update(currentBulk);
+    filers[bulkCounter%filers.size()]->update(currentBulk, qstring);
     bulkCounter++;
     currentBulk.clear();
 }

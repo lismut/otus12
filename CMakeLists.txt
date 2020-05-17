@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.2)
 if($ENV{TRAVIS_BUILD_NUMBER})
-    project(async VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
+    project(bulk_server VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
 else()
-    project(async VERSION 0.0.3)
+    project(bulk_server VERSION 0.0.3)
 endif()
 
 configure_file(version.h.in "${CMAKE_CURRENT_SOURCE_DIR}/version.h")
@@ -12,23 +12,23 @@ add_subdirectory(
         gtest
 )
 
-add_executable(bulkmt main.cpp subscriber.h bulk.h bulkmanager.h threadqueue.h async.cpp )
+add_executable(bulk_server main.cpp )
+add_library(bulk_lib  async.h async.cpp bulk.h subscriber.h bulkmanager.h threadqueue.h)
+add_executable(client client.cpp client.h)
 add_executable(test_google testg.cpp)
 
-set(CXX_STANDARD 17)
+set(CXX_STANDARD 11)
 set(CXX_STANDARD_REQUIRED ON)
 find_package (Threads REQUIRED)
-add_library(libasync SHARED async.cpp)
+find_package(Boost REQUIRED COMPONENTS system)
 
-target_link_libraries (libasync ${CMAKE_THREAD_LIBS_INIT})
-target_link_libraries (bulkmt ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries (bulk_server ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES} bulk_lib)
+target_link_libraries (client ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 target_link_libraries(test_google
     gtest
+    bulk_lib
     ${CMAKE_THREAD_LIBS_INIT}
 )
-
-install(TARGETS libasync DESTINATION lib)
-install(FILES async.h DESTINATION include)
 
 set(CPACK_GENERATOR DEB)
 
@@ -41,10 +41,9 @@ set(CPACK_PACKAGE_CONTACT lismut@gmail.com)
 include(CPack)
 enable_testing()
 
-#add_test(test_valid_version print_ip)
-add_test(GOOGLE_TEST1 bulkmt)
-add_test(GOOGLE_TEST2 bulkmt)
-add_test(GOOGLE_TEST3 bulkmt)
-add_test(GOOGLE_TEST4 bulkmt)
-add_test(GOOGLE_TEST5 bulkmt)
-add_test(GOOGLE_TEST6 bulkmt)
+add_test(GOOGLE_TEST1 bulk_server)
+add_test(GOOGLE_TEST2 bulk_server)
+add_test(GOOGLE_TEST3 bulk_server)
+add_test(GOOGLE_TEST4 bulk_server)
+add_test(GOOGLE_TEST5 bulk_server)
+add_test(GOOGLE_TEST6 bulk_server)
