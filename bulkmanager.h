@@ -41,8 +41,8 @@ private:
 };
 
 void bulkManager::newString(const std::string& input, std::shared_ptr<QueueString> qq) {
-    static const std::string open = "{";
-    static const std::string close = "}";
+    static const std::string open = openStr();
+    static const std::string close = closeStr();
     strCounter++;
     if (qq != qstring) qstring = qq;
     if (input != open && input != close) {

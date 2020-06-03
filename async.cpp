@@ -21,6 +21,8 @@ void receive(handle_t handle, const char *data, std::size_t size, std::shared_pt
             ss >> a;
             it->second->newString(a, qq);
         }
+    } else {
+        std::cout << "something went wrong with id handler" << std::endl;
     }
 }
 

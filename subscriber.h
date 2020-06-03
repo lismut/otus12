@@ -11,6 +11,13 @@
 
 extern std::mutex globalCoutMutex;
 
+std::string openStr() {
+    return "{";
+}
+
+std::string closeStr() {
+    return "}";
+}
 ///  @brief Класс-интерфейс подписчиков для обработчиков конца блока команд
 class isubscriber {
 public:
@@ -54,7 +61,8 @@ private:
     void proc(std::unique_ptr<bulk> b) {
         std::lock_guard<std::mutex> grd(globalCoutMutex);
         std::string out = "bulk: " + b->output() + "\n";
-        qstring->enqueue(std::make_unique<std::string>(out));
+        //qstring->enqueue(std::make_unique<std::string>(out));
+        std::cout << "bulk: " << b->output() << std::endl;
     }
 };
 
