@@ -6,7 +6,7 @@ else()
 endif()
 
 configure_file(version.h.in "${CMAKE_CURRENT_SOURCE_DIR}/version.h")
-
+include_directories(${Boost_INCLUDE_DIRS})
 add_subdirectory(
         "${CMAKE_CURRENT_SOURCE_DIR}/gtest"
         gtest
@@ -16,7 +16,7 @@ add_executable(bulk_server main.cpp async.h async.cpp bulk.h subscriber.h bulkma
 #add_executable(client client.cpp client.h)
 #add_executable(test_google testg.cpp)
 
-set(CXX_STANDARD 11)
+set(CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED ON)
 find_package (Threads REQUIRED)
 find_package(Boost COMPONENTS system REQUIRED)
