@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include <string>
-#include "bulkmanager.h"
 #include "async.h"
+#include "bulkmanager.h"
 
 std::string openS = openStr();
 std::string closeS = closeStr();

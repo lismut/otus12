@@ -12,23 +12,22 @@ add_subdirectory(
         gtest
 )
 
-add_executable(bulk_server main.cpp )
-add_library(bulk_lib  async.h async.cpp bulk.h subscriber.h bulkmanager.h threadqueue.h)
+add_executable(bulk_server main.cpp async.h async.cpp bulk.h subscriber.h bulkmanager.h threadqueue.h)
 #add_executable(client client.cpp client.h)
-add_executable(test_google testg.cpp)
+#add_executable(test_google testg.cpp)
 
 set(CXX_STANDARD 11)
 set(CXX_STANDARD_REQUIRED ON)
 find_package (Threads REQUIRED)
 find_package(Boost COMPONENTS system REQUIRED)
 
-target_link_libraries (bulk_server ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES} bulk_lib)
+target_link_libraries (bulk_server ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 #target_link_libraries (client ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
-target_link_libraries(test_google
-    gtest
-    bulk_lib
-    ${CMAKE_THREAD_LIBS_INIT}
-)
+#target_link_libraries(test_google
+#    gtest
+#    ${CMAKE_THREAD_LIBS_INIT}
+#    ${Boost_LIBRARIES}
+#)
 
 set(CPACK_GENERATOR DEB)
 
