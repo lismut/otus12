@@ -75,8 +75,8 @@ private:
 class server
 {
 public:
-    server(boost::asio::io_context& io_context, short port, short _bulk_size)
-            : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)), bulk_size(_bulk_size)
+    server(boost::asio::io_service& io_con, short port, short _bulk_size)
+            : acceptor_(io_con, tcp::endpoint(tcp::v4(), port)), bulk_size(_bulk_size)
     {
         do_accept();
     }
@@ -124,11 +124,11 @@ int main(int argc, char* argv[])
             return 1;
         }
 
-        boost::asio::io_context io_context;
+        boost::asio::io_service io_con;
 
-        server server(io_context, port, bulk_size);
+        server server(io_con, port, bulk_size);
 
-        io_context.run();
+        io_con.run();
     }
     catch (const std::exception& ex)
     {
