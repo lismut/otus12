@@ -4,7 +4,7 @@ os: linux
 
 matrix:
   include:
-    - env: COMPILER=g++-8 BUILD=Debug STANDARD=17
+    - env: COMPILER=g++-7 BUILD=Debug STANDARD=17
       compiler: gcc
       addons:
         apt:
@@ -13,7 +13,7 @@ matrix:
             - sourceline: 'ppa:mhier/libboost-latest'
             - ubuntu-toolchain-r-test
           packages:
-            - g++-8
+            - g++-7
             - boost1.67
             - doxygen
             - doxygen-doc
