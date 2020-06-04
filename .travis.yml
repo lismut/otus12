@@ -2,23 +2,24 @@ language: cpp
 dist: trusty
 os: linux
 
-include:
-  - env: COMPILER=g++-8 BUILD=Debug STANDARD=17
-    compiler: gcc
-    addons:
-      apt:
-        update: true
-        sources:
-          - sourceline: 'ppa:mhier/libboost-latest'
-          - ubuntu-toolchain-r-test
-        packages:
-          - g++-8
-          - boost1.67
-          - doxygen
-          - doxygen-doc
-          - doxygen-latex
-          - doxygen-gui
-          - graphviz
+matrix:
+  include:
+    - env: COMPILER=g++-8 BUILD=Debug STANDARD=17
+      compiler: gcc
+      addons:
+        apt:
+          update: true
+          sources:
+            - sourceline: 'ppa:mhier/libboost-latest'
+            - ubuntu-toolchain-r-test
+          packages:
+            - g++-8
+            - boost1.67
+            - doxygen
+            - doxygen-doc
+            - doxygen-latex
+            - doxygen-gui
+            - graphviz
 script:
 - cmake .
 - cmake --build .
