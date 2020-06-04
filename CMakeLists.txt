@@ -12,25 +12,22 @@ add_subdirectory(
         gtest
 )
 
-add_executable(bulk_server main.cpp async.h async.cpp bulk.h subscriber.h bulkmanager.h threadqueue.h testg.cpp)
+add_executable(bulk_server main.cpp async.h async.cpp bulk.h subscriber.h bulkmanager.h threadqueue.h)
 #add_executable(client client.cpp client.h)
-#add_executable(test_google testg.cpp)
+add_executable(test_google testg.cpp async.h async.cpp bulk.h subscriber.h bulkmanager.h threadqueue.h)
 
 set(CXX_STANDARD 17)
 set(CXX_STANDARD_REQUIRED ON)
 find_package (Threads REQUIRED)
 find_package(Boost COMPONENTS system REQUIRED)
 
-target_link_libraries (bulk_server ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES}
+target_link_libraries (bulk_server ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+#target_link_libraries (client ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+target_link_libraries(test_google
     gtest
     ${CMAKE_THREAD_LIBS_INIT}
+    ${Boost_LIBRARIES}
 )
-#target_link_libraries (client ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
-#target_link_libraries(test_google
-#    gtest
-#    ${CMAKE_THREAD_LIBS_INIT}
-#    ${Boost_LIBRARIES}
-#)
 
 set(CPACK_GENERATOR DEB)
 
@@ -43,9 +40,9 @@ set(CPACK_PACKAGE_CONTACT lismut@gmail.com)
 include(CPack)
 enable_testing()
 
-add_test(GOOGLE_TEST1 bulk_server)
-add_test(GOOGLE_TEST2 bulk_server)
-add_test(GOOGLE_TEST3 bulk_server)
-add_test(GOOGLE_TEST4 bulk_server)
-add_test(GOOGLE_TEST5 bulk_server)
-add_test(GOOGLE_TEST6 bulk_server)
+add_test(GOOGLE_TEST1 test)
+add_test(GOOGLE_TEST2 test)
+add_test(GOOGLE_TEST3 test)
+add_test(GOOGLE_TEST4 test)
+add_test(GOOGLE_TEST5 test)
+add_test(GOOGLE_TEST6 test)

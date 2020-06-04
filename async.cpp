@@ -40,3 +40,5 @@ std::string openStr() {
 std::string closeStr() {
     return "}";
 }
+
+std::mutex globalCoutMutex;
