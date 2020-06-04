@@ -3,7 +3,7 @@ dist: trusty
 os: linux
 
 include:
-  - env: COMPILER=g++-6 BUILD=Debug STANDARD=17
+  - env: COMPILER=g++-8 BUILD=Debug STANDARD=17
     compiler: gcc
     addons:
       apt:
@@ -12,7 +12,7 @@ include:
           - sourceline: 'ppa:mhier/libboost-latest'
           - ubuntu-toolchain-r-test
         packages:
-          - g++-6
+          - g++-8
           - boost1.67
           - doxygen
           - doxygen-doc
