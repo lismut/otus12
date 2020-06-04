@@ -1,37 +1,24 @@
 language: cpp
 dist: trusty
-sudo: false
 os: linux
 
-matrix:
-  include:
-    - env: COMPILER=g++-6 BUILD=Debug STANDARD=14
-      compiler: gcc
-      addons:
-        apt:
-          update: true
-          sources:
-            - sourceline: 'ppa:mhier/libboost-latest'
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-6
-            - boost1.67
-            - doxygen
-            - doxygen-doc
-            - doxygen-latex
-            - doxygen-gui
-            - graphviz
-    - env: COMPILER=g++-6 BUILD=Release STANDARD=14
-      compiler: gcc
-      addons:
-        apt:
-          update: true
-          sources:
-            - sourceline: 'ppa:mhier/libboost-latest'
-            - ubuntu-toolchain-r-test
-          packages:
-            - g++-6
-            - boost1.67
+include:
+  - env: COMPILER=g++-6 BUILD=Debug STANDARD=17
+    compiler: gcc
+    addons:
+      apt:
+        update: true
+        sources:
+          - sourceline: 'ppa:mhier/libboost-latest'
+          - ubuntu-toolchain-r-test
+        packages:
+          - g++-6
+          - boost1.67
+          - doxygen
+          - doxygen-doc
+          - doxygen-latex
+          - doxygen-gui
+          - graphviz
 script:
 - cmake .
 - cmake --build .
@@ -41,7 +28,6 @@ script:
 - doxygen Doxyfile
 deploy:
   - provider: pages
-    skip_cleanup: true
     local_dir: $TRAVIS_BUILD_DIR/doxygen/html
     github_token: $GITHUB_TOKEN
     keep_history: true
@@ -49,6 +35,5 @@ deploy:
       branch: master
 
   - provider: script
-    skip_cleanup: true
     script:
     - curl -T bulk_server-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb -ulismut:$BINTRAY_API_KEY "https://api.bintray.com/content/lismut/otus12/otus12/$TRAVIS_BUILD_NUMBER/bulk_server-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb;deb_distribution=trusty;deb_component=main;deb_architecture=amd64;publish=1"
