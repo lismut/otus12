@@ -11,13 +11,6 @@
 
 extern std::mutex globalCoutMutex;
 
-std::string openStr() {
-    return "{";
-}
-
-std::string closeStr() {
-    return "}";
-}
 ///  @brief Класс-интерфейс подписчиков для обработчиков конца блока команд
 class isubscriber {
 public:

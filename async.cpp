@@ -33,3 +33,10 @@ void disconnect(handle_t handle) {
     }
 }
 }
+std::string openStr() {
+    return "{";
+}
+
+std::string closeStr() {
+    return "}";
+}

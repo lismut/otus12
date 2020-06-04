@@ -7,8 +7,6 @@
 #include <memory>
 #include "subscriber.h"
 
-std::mutex globalCoutMutex;
-
 /// @brief Класс-обработчик поступающих входных строк
 struct bulkManager {
     bulkManager(size_t sz) : currentBulk(sz), bulkLimit(sz) {
@@ -16,7 +14,30 @@ struct bulkManager {
         filers.push_back(std::make_unique<filer>(1));
         filers.push_back(std::make_unique<filer>(2));
     }
-    void newString(const std::string& input, std::shared_ptr<QueueString> qq);
+    void newString(const std::string& input, std::shared_ptr<QueueString> qq){
+        static const std::string open = openStr();
+        static const std::string close = closeStr();
+        strCounter++;
+        if (qq != qstring) qstring = qq;
+        if (input != open && input != close) {
+            currentBulk.push(input);
+            comCounter++;
+            if (currentBulk.size() == bulkLimit && nestingCounter == 0) {
+                flush();
+            }
+        } else if (input == open) {
+            if (nestingCounter == 0) {
+                flush();
+            }
+            ++nestingCounter;
+        } else {
+            --nestingCounter;
+            if (nestingCounter < 1) {
+                flush();
+                nestingCounter = 0; // во избежание проблем с некорректной последовательностью закрывающих скобок
+            }
+        }
+    }
     // For testing
     const bulk& getBulk() const {return currentBulk; }
     const size_t& getNesting() const {return nestingCounter; }
@@ -28,7 +49,15 @@ struct bulkManager {
         qstring->enqueue(std::make_unique<std::string>(out));
     }
 private:
-    void flush();
+    /// @brief Обработка конца блока команд
+    void flush(){
+        std::for_each(printers.begin(), printers.end(), [&](const auto& a){
+            a->update(currentBulk, qstring);
+        });
+        filers[bulkCounter%filers.size()]->update(currentBulk, qstring);
+        bulkCounter++;
+        currentBulk.clear();
+    }
     std::shared_ptr<QueueString> qstring;
     size_t nestingCounter = 0; //< Текущий уровень вложенности {
     size_t bulkLimit; //< Размер блока команд
@@ -39,38 +68,3 @@ private:
     size_t comCounter = 0;
     size_t bulkCounter = 0;
 };
-
-void bulkManager::newString(const std::string& input, std::shared_ptr<QueueString> qq) {
-    static const std::string open = openStr();
-    static const std::string close = closeStr();
-    strCounter++;
-    if (qq != qstring) qstring = qq;
-    if (input != open && input != close) {
-        currentBulk.push(input);
-        comCounter++;
-        if (currentBulk.size() == bulkLimit && nestingCounter == 0) {
-            flush();
-        }
-    } else if (input == open) {
-        if (nestingCounter == 0) {
-            flush();
-        }
-        ++nestingCounter;
-    } else {
-        --nestingCounter;
-        if (nestingCounter < 1) {
-            flush();
-            nestingCounter = 0; // во избежание проблем с некорректной последовательностью закрывающих скобок
-        }
-    }
-}
-
-/// @brief Обработка конца блока команд
-void bulkManager::flush() {
-    std::for_each(printers.begin(), printers.end(), [&](const auto& a){
-        a->update(currentBulk, qstring);
-    });
-    filers[bulkCounter%filers.size()]->update(currentBulk, qstring);
-    bulkCounter++;
-    currentBulk.clear();
-}

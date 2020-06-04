@@ -12,3 +12,7 @@ void receive(handle_t handle, const char *data, std::size_t size, std::shared_pt
 void disconnect(handle_t handle);
 
 }
+
+std::string openStr();
+
+std::string closeStr();

@@ -11,8 +11,7 @@
 using boost::asio::ip::tcp;
 
 //----------------------------------------------------------------------
-
-using boost::asio::ip::tcp;
+std::mutex globalCoutMutex;
 
 class session
         : public std::enable_shared_from_this<session>
@@ -76,7 +75,7 @@ class server
 {
 public:
     server(boost::asio::io_context& io_con, short port, short _bulk_size)
-            : acceptor_(io_con, tcp::endpoint(tcp::v4(), port)), bulk_size(_bulk_size)
+            : acceptor_(io_con,tcp::endpoint(tcp::v4(), port)), bulk_size(_bulk_size)
     {
         do_accept();
     }

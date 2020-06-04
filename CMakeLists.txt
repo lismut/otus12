@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.2)
 if($ENV{TRAVIS_BUILD_NUMBER})
-    project(bulk_server VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
+    project(bulk_srv VERSION 0.0.$ENV{TRAVIS_BUILD_NUMBER})
 else()
-    project(bulk_server VERSION 0.0.3)
+    project(bulk_srv VERSION 0.0.3)
 endif()
 
 configure_file(version.h.in "${CMAKE_CURRENT_SOURCE_DIR}/version.h")
@@ -12,7 +12,7 @@ add_subdirectory(
         gtest
 )
 
-add_executable(bulk_server main.cpp async.h async.cpp bulk.h subscriber.h bulkmanager.h threadqueue.h)
+add_executable(bulk_server main.cpp async.h async.cpp bulk.h subscriber.h bulkmanager.h threadqueue.h testg.cpp)
 #add_executable(client client.cpp client.h)
 #add_executable(test_google testg.cpp)
 
@@ -21,7 +21,10 @@ set(CXX_STANDARD_REQUIRED ON)
 find_package (Threads REQUIRED)
 find_package(Boost COMPONENTS system REQUIRED)
 
-target_link_libraries (bulk_server ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+target_link_libraries (bulk_server ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES}
+    gtest
+    ${CMAKE_THREAD_LIBS_INIT}
+)
 #target_link_libraries (client ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 #target_link_libraries(test_google
 #    gtest
