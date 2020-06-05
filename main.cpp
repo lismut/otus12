@@ -7,7 +7,6 @@
 #include <utility>
 #include <boost/asio.hpp>
 #include "async.h"
-//#include "client.h"
 using boost::asio::ip::tcp;
 
 //----------------------------------------------------------------------
@@ -39,29 +38,11 @@ private:
                                 {
                                     if (!ec)
                                     {
-                                        //std::cout << "receive " << length << "=" << std::string{data_, length} << std::endl;
                                         async::receive(handle, data_, length, qq);
                                         do_read();
                                     }
                                 });
     }
-
-    /*void do_write()
-    {
-        std::unique_ptr<std::string> one = qq->dequeue();
-        auto self(shared_from_this());
-        boost::asio::async_write(socket_, boost::asio::buffer(one->c_str(), one->size()),
-                                 [this, self](boost::system::error_code ec, std::size_t length)
-                                 {
-                                     if (!ec)
-                                     {
-                                         if(qq->empty())
-                                             do_read();
-                                         else
-                                             do_write();
-                                     }
-                                 });
-    }*/
 
     tcp::socket socket_;
     async::handle_t handle;
@@ -133,7 +114,6 @@ int main(int argc, char* argv[])
     {
         std::cerr << "Exception: " << ex.what() << "\n";
     }
-
 
     return 0;
 }

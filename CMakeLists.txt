@@ -13,7 +13,7 @@ add_subdirectory(
 )
 
 add_executable(bulk_server main.cpp async.h async.cpp bulk.h subscriber.h bulkmanager.h threadqueue.h)
-#add_executable(client client.cpp client.h)
+add_executable(client client.cpp client.h)
 add_executable(tests testg.cpp async.h async.cpp bulk.h subscriber.h bulkmanager.h threadqueue.h)
 
 set(CXX_STANDARD 17)
@@ -22,7 +22,7 @@ find_package (Threads REQUIRED)
 find_package(Boost COMPONENTS system REQUIRED)
 
 target_link_libraries (bulk_server ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
-#target_link_libraries (client ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
+target_link_libraries (client ${CMAKE_THREAD_LIBS_INIT} ${Boost_LIBRARIES})
 target_link_libraries(tests
     gtest
     ${CMAKE_THREAD_LIBS_INIT}
