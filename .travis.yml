@@ -12,6 +12,11 @@ addons:
     packages:
       - g++-9
       - boost1.70
+      - doxygen
+      - doxygen-doc
+      - doxygen-latex
+      - doxygen-gui
+      - graphviz
 env:
   - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
 before_install:
