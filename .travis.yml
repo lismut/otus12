@@ -29,7 +29,6 @@ script:
 #- mkdir doxygen
 #- doxygen Doxyfile
 deploy:
-  - skip_cleanup: true
   #  - provider: pages
 #    local_dir: $TRAVIS_BUILD_DIR/doxygen/html
 #    github_token: $GITHUB_TOKEN
@@ -38,5 +37,6 @@ deploy:
 #      branch: master
 
   - provider: script
+    skip_cleanup: true
     script:
     - curl -T bulk_server-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb -ulismut:$BINTRAY_API_KEY "https://api.bintray.com/content/lismut/otus12/otus12/$TRAVIS_BUILD_NUMBER/bulk_server-0.0.$TRAVIS_BUILD_NUMBER-Linux.deb;deb_distribution=trusty;deb_component=main;deb_architecture=amd64;publish=1"
