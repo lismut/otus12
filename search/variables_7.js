@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['tasks',['tasks',['../classisubscriber.html#a2f8dc852005cb33a7a4004f0ae01e1bc',1,'isubscriber']]]
+  ['opens',['openS',['../testg_8cpp.html#a0fac83aadf85a2ce1145b39868fb663f',1,'testg.cpp']]]
 ];

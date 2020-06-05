@@ -1,7 +1,9 @@
 <map id="bulk.h" name="bulk.h">
-<area shape="rect" id="node2" href="$bulkmanager_8h.html" title="bulkmanager.h" alt="" coords="44,229,163,256"/>
-<area shape="rect" id="node5" href="$subscriber_8h.html" title="subscriber.h" alt="" coords="97,155,197,181"/>
-<area shape="rect" id="node6" href="$threadqueue_8h.html" title="threadqueue.h" alt="" coords="148,80,264,107"/>
-<area shape="rect" id="node3" href="$async_8cpp.html" title="async.cpp" alt="" coords="5,304,92,331"/>
-<area shape="rect" id="node4" href="$testg_8cpp.html" title="testg.cpp" alt="" coords="117,304,199,331"/>
+<area shape="rect" id="node2" href="$threadqueue_8h.html" title="threadqueue.h" alt="" coords="65,80,169,107"/>
+<area shape="rect" id="node3" href="$async_8h.html" title="async.h" alt="" coords="137,229,205,256"/>
+<area shape="rect" id="node7" href="$subscriber_8h.html" title="subscriber.h" alt="" coords="25,155,119,181"/>
+<area shape="rect" id="node4" href="$async_8cpp.html" title="async.cpp" alt="" coords="121,304,204,331"/>
+<area shape="rect" id="node5" href="$main_8cpp.html" title="main.cpp" alt="" coords="228,304,303,331"/>
+<area shape="rect" id="node6" href="$testg_8cpp.html" title="testg.cpp" alt="" coords="21,304,97,331"/>
+<area shape="rect" id="node8" href="$bulkmanager_8h.html" title="bulkmanager.h" alt="" coords="5,229,112,256"/>
 </map>

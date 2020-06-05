@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['printer',['printer',['../classprinter.html',1,'']]]
+  ['isubscriber',['isubscriber',['../classisubscriber.html',1,'']]]
 ];
