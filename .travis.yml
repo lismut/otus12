@@ -14,15 +14,6 @@ addons:
       - boost1.70
   env:
     - MATRIX_EVAL="CC=gcc-9 && CXX=g++-9"
-
-before_script:
-  - echo "deb http://archive.ubuntu.com/ubuntu bionic main universe" | sudo tee -a /etc/apt/sources.list
-  - sudo add-apt-repository --yes ppa:ubuntu-toolchain-r/test
-  - sudo apt-get install libboost-all-dev -y
-  - sudo apt-get install libasio-dev -y
-  - sudo apt-get install -qq g++-7
-  - sudo apt-get update -qq
-  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90
 script:
 - cmake .
 - cmake --build .
